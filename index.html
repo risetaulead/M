@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Redirect</title>
+    <style>
+       body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            flex-direction: column;
+        }
+         iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* Style for the start button */
+        #startButton {
+            padding: 20px 40px;
+            font-size: 2em;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            z-index: 1; /* Ensure button is above iframe */
+        }
+        #startButton:hover {
+            background-color: #218838;
+        }
+        /* Optional: Message display */
+        #message {
+            margin-top: 20px;
+            color: #fff;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Embedding Google Drive Video -->
+    <iframe id="videoFrame" src="https://drive.google.com/file/d/1RpIu1VWRbilgQtBhoLAEmFIz7-u81Qtb/preview" allow="autoplay"></iframe>
+
+    <!-- Start Button -->
+    <button id="startButton">Play Video</button>
+
+    <!-- Optional: Message Area -->
+    <div id="message"></div>
+
+    <script>
+        // Set the duration of your video in seconds
+        const VIDEO_DURATION_SECONDS = 60; // Replace with your video's actual duration
+
+        // Function to redirect to WhatsApp Web
+        function redirectToWhatsApp() {
+            window.location.href = 'https://web.whatsapp.com';
+        }
+
+        // Function to start the video and timer
+        function startVideo() {
+            // Hide the start button
+            document.getElementById('startButton').style.display = 'none';
+
+            // Show the video iframe
+            const videoFrame = document.getElementById('videoFrame');
+            videoFrame.style.display = 'block';
+
+            // Optionally, you can start playing the video automatically
+            // This depends on the browser's autoplay policies
+            // videoFrame.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+
+            // Start the timer for the video's duration
+            setTimeout(redirectToWhatsApp, VIDEO_DURATION_SECONDS * 1000);
+
+            // Optional: Display a countdown message
+            const messageDiv = document.getElementById('message');
+            let remainingTime = VIDEO_DURATION_SECONDS;
+            messageDiv.textContent = `You will be redirected to WhatsApp in ${remainingTime} seconds.`;
+
+            const countdownInterval = setInterval(() => {
+                remainingTime--;
+                if (remainingTime > 0) {
+                    messageDiv.textContent = `You will be redirected to WhatsApp in ${remainingTime} seconds.`;
+                } else {
+                    clearInterval(countdownInterval);
+                    messageDiv.textContent = 'Redirecting...';
+                }
+            }, 1000);
+        }
+
+        // Attach event listener to the start button
+        document.getElementById('startButton').addEventListener('click', startVideo);
+    </script>
+
+</body>
+</html>
